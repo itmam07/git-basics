@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>git cheat sheet</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#git-cheat-sheet">GIT CHEAT SHEET</a>
+<ul>
+<li><a href="#installation">INSTALLATION</a></li>
+<li><a href="#setup">SETUP</a>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#basics">Basics</a>
+<ul>
+<li><a href="#cloning-a-repo">Cloning a repo</a></li>
+<li><a href="#creating-a-repo">Creating a repo</a></li>
+<li><a href="#staging">STAGING</a>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="git-cheat-sheet">GIT CHEAT SHEET</h1>
+<p align="center">Itmam Alam - 24.09.2024</p>
+<h2 id="installation">INSTALLATION</h2>
+<p>To install git on your PC go to <a href="https://git-scm.com">https://git-scm.com</a> and choose your OS. For Windows, after opening the installer just click on all default settings and start the installation.</p>
+<h2 id="setup">SETUP</h2>
+<p>Open your terminal and try to see if git was installed correctly:</p>
+<pre><code>$ git -v
+</code></pre>
+<p>You should get something like: <em>git version 2.43.0.windows.1</em></p>
+<h4 id="config">Config</h4>
+<p>Now we want to set some config data:</p>
+<pre><code>$ git config --global user.name “firstname lastname”
+$ git config --global user.email “email”
+</code></pre>
+<p>So git knows who you are.</p>
+<h4 id="optionally">Optionally</h4>
+<p>Git repos where (and sometime still are) initially created with a “master” branch. We don’t want that sh*t so</p>
+<pre><code>$ git config --global init.defaultBranch main
+</code></pre>
+<p>This ensures that when you initialize a new git repo on your PC, it has a “main” and not a “master” branch. You will see that in the next section.</p>
+<h1 id="basics">Basics</h1>
+<h2 id="cloning-a-repo">Cloning a repo</h2>
+<p>Cloning a repo means to get a git repository from the web, such as <a href="http://github.com">github.com</a> or something. Often when working with different people, you want to work together in the same project. So one creates the repo, which you have to “copy” to your own pc by cloning it.</p>
+<pre><code>$ git clone [url] | [ssh]
+$ git clone git@github.com:itmam07/pos.git
+$ git clone https://github.com/itmam07/pos.git
+</code></pre>
+<h2 id="creating-a-repo">Creating a repo</h2>
+<p>For your own projects (SYP, POS) you have to create a git repo. This allows you to for example maintain a clean code history since git tracks all changes to the code over time. It is also <s>a</s> <strong>the</strong> way to collaborate with others regarding software dev.</p>
+<h3 id="over-github">Over GitHub*</h3>
+<p>*or any other code hosting provider like GitLab</p>
+<p>Go to the folder where you want to make a new git repo.</p>
+<pre><code>$ cd my-project
+</code></pre>
+<p>Then initialize git</p>
+<pre><code>$ git init
+</code></pre>
+<blockquote>
+<p>git init:<br>
+This creates a hidden .git folder in your project folder. All<br>
+information that git needs is in that folder. You yourself have to do<br>
+nothing with this folder so forget it.</p>
+</blockquote>
+<p>Now you should be able to use git in that folder. You can add files, track them with git for changes, etc.</p>
+<pre><code>$ echo "# my-project" &gt;&gt; README.md     # create a READMEfile
+$ git add README.md   				   # let git know that it should track this file
+$ git commit -m "intial commit"		   # commit changes
+</code></pre>
+<p>But the thing is it is not synced with any repo on your GitHub account. For that we have to set a <strong>remote origin</strong> for your repo.</p>
+<p>So after going through the creation process over on <a href="http://github.com">github.com</a> you are now left with a repo name. Let’s assume that this repo is called <em>my-project.</em></p>
+<p>Then go back to the terminal in your folder:</p>
+<pre><code>$ git remote add origin git@github.com:username/my-project.git
+$ git remote add origin https://github.com/username/my-project.git
+$ git push --set-upstream origin main
+</code></pre>
+<p>For the first commit (and after changing branches) you have to set the “<strong>remote origin</strong>” of your repo. This is so git nows on which branch it should push the changes to, e.g. main, dev, feature etc.</p>
+<blockquote>
+<p>Note: There is a way to automate this whole thing:<br>
+$ git config --global --add --bool push.autoSetupRemote true<br>
+after that you don’t have to do that --set-upstream thing anymore</p>
+</blockquote>
+<p>In this case the main branch. We will come to branching later. After this first push git nows where to push changes to automatically, so you only have to write <strong>$ git push</strong>.</p>
+<h2 id="staging">STAGING</h2>
+<p>Staging is the process to tell git to track changes on a specific file. In git there are two stages:</p>
+<h4 id="untracked">Untracked</h4>
+<p>The file is currently not tracked, and won’t be added to the next commit, that means those changes are currently only on your computer.</p>
+<blockquote>
+<p>This state always occurs when you create a new file for example hello.txt.</p>
+</blockquote>
+<h4 id="staged">Staged</h4>
+<p>These files are tracked by git and they will be included in the next commit. To get a file  tracked by git use the following command:</p>
+<pre><code>$ git add [file_name]
+$ git add hello.txt
+</code></pre>
+<h4 id="status">Status</h4>
+<p>You can always view the current status of each file in your folder by simply typing:</p>
+<pre><code>$ git status
+</code></pre>
+<p><strong>For me, this is THE most important command for git.</strong> It always shows you what you have to stage.</p>
+<h4 id="unstaging">Unstaging</h4>
+<p>Often times you decide that a specific staged file is not necessary for this commit. To unstage this file:</p>
+<pre><code>$ git restore --staged [file]
+$ git restore --staged hello.txt
+</code></pre>
+<p>When you execute $ git status now, you will see that hello.txt is untracked again.</p>
+<p>There is another way to unstage, but i don’t recommend it since it is meant for another reason (changing commit history) and can potentially cause a <strong>lot</strong> of trouble.</p>
+<pre><code>$ git reset [file]
+$ git reset hello.txt
+</code></pre>
+
+    </div>
+  </div>
+</body>
+
+</html>
